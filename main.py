@@ -24,7 +24,7 @@ def get_db():
 
 @app.post("/estudiantes/", response_model=schemas.EstudianteBase)
 def crear_estudiante(estudiante: schemas.CrearEstudiante, db: Session = Depends(get_db)):
-    nuevo = models.Estudiantes(**estudiante.dict())
+    nuevo = models.Estudiante(**estudiante.dict())
     db.add(nuevo)
     db.commit()
     db.refresh(nuevo)
@@ -33,15 +33,15 @@ def crear_estudiante(estudiante: schemas.CrearEstudiante, db: Session = Depends(
 #Lista todos los estudiantes. Filtro por semestre
 @app.get("/estudiantes/", response_model=list[schemas.EstudianteBase])
 def listar_estudiantes(semestre: int | None = None, db: Session = Depends(get_db)):
-    query = db.query(models.Estudiantes)
+    query = db.query(models.Estudiante)
     if semestre:
-        query = query.filter(models.Estudiantes.semestre == semestre)
+        query = query.filter(models.Estudiante.semestre == semestre)
     return query.all()
 
 
 @app.get("/estudiantes/{estudiante_id}", response_model=schemas.EstudianteBase)
 def obtener_estudiante(estudiante_id: int, db: Session = Depends(get_db)):
-    estudiante = db.query(models.Estudiantes).filter(models.Estudiantes.id == estudiante_id).first()
+    estudiante = db.query(models.Estudiante).filter(models.Estudiante.id == estudiante_id).first()
     if not estudiante:
         raise HTTPException(status_code=404, detail="Estudiante no encontrado")
     return estudiante
@@ -49,7 +49,7 @@ def obtener_estudiante(estudiante_id: int, db: Session = Depends(get_db)):
 
 @app.put("/estudiantes/{estudiante_id}", response_model=schemas.EstudianteBase)
 def actualizar_estudiante(estudiante_id: int, datos: schemas.ActualizarEstudiante, db: Session = Depends(get_db)):
-    estudiante = db.query(models.Estudiantes).filter(models.Estudiantes.id == estudiante_id).first()
+    estudiante = db.query(models.Estudiante).filter(models.Estudiante.id == estudiante_id).first()
     if not estudiante:
         raise HTTPException(status_code=404, detail="Estudiante no encontrado")
     for key, value in datos.dict(exclude_unset=True).items():
@@ -61,7 +61,7 @@ def actualizar_estudiante(estudiante_id: int, datos: schemas.ActualizarEstudiant
 
 @app.delete("/estudiantes/{estudiante_id}")
 def eliminar_estudiante(estudiante_id: int, db: Session = Depends(get_db)):
-    estudiante = db.query(models.Estudiantes).filter(models.Estudiantes.id == estudiante_id).first()
+    estudiante = db.query(models.Estudiante).filter(models.Estudiante.id == estudiante_id).first()
     if not estudiante:
         raise HTTPException(status_code=404, detail="Estudiante no encontrado")
     db.delete(estudiante)
@@ -75,7 +75,7 @@ def eliminar_estudiante(estudiante_id: int, db: Session = Depends(get_db)):
 
 @app.post("/cursos/", response_model=schemas.Curso)
 def crear_curso(curso: schemas.CrearCurso, db: Session = Depends(get_db)):
-    nuevo = models.Cursos(**curso.dict())
+    nuevo = models.Curso(**curso.dict())
     db.add(nuevo)
     db.commit()
     db.refresh(nuevo)
@@ -87,15 +87,15 @@ def crear_curso(curso: schemas.CrearCurso, db: Session = Depends(get_db)):
 def listar_cursos(creditos: int | None = None, codigo: str | None = None, db: Session = Depends(get_db)):
     query = db.query(models.Curso)
     if creditos:
-        query = query.filter(models.Cursos.creditos == creditos)
+        query = query.filter(models.Curso.creditos == creditos)
     if codigo:
-        query = query.filter(models.Cursos.codigo == codigo)
+        query = query.filter(models.Curso.codigo == codigo)
     return query.all()
 
 
 @app.get("/cursos/{curso_id}", response_model=schemas.Curso)
 def obtener_curso(curso_id: int, db: Session = Depends(get_db)):
-    curso = db.query(models.Cursos).filter(models.Cursos.id == curso_id).first()
+    curso = db.query(models.Curso).filter(models.Curso.id == curso_id).first()
     if not curso:
         raise HTTPException(status_code=404, detail="Curso no encontrado")
     return curso
@@ -103,7 +103,7 @@ def obtener_curso(curso_id: int, db: Session = Depends(get_db)):
 
 @app.put("/cursos/{curso_id}", response_model=schemas.Curso)
 def actualizar_curso(curso_id: int, datos: schemas.ActualizarCurso, db: Session = Depends(get_db)):
-    curso = db.query(models.Cursos).filter(models.Cursos.id == curso_id).first()
+    curso = db.query(models.Curso).filter(models.Curso.id == curso_id).first()
     if not curso:
         raise HTTPException(status_code=404, detail="Curso no encontrado")
     for key, value in datos.dict(exclude_unset=True).items():
@@ -115,7 +115,7 @@ def actualizar_curso(curso_id: int, datos: schemas.ActualizarCurso, db: Session 
 
 @app.delete("/cursos/{curso_id}")
 def eliminar_curso(curso_id: int, db: Session = Depends(get_db)):
-    curso = db.query(models.Cursos).filter(models.Cursos.id == curso_id).first()
+    curso = db.query(models.Curso).filter(models.Cursos.id == curso_id).first()
     if not curso:
         raise HTTPException(status_code=404, detail="Curso no encontrado")
     db.delete(curso)
@@ -143,8 +143,8 @@ def matricular_estudiante(matricula: schemas.CrearMatricula, db: Session = Depen
 #Desmatricula un estudiante de un curso.
 @app.delete("/matriculas/")
 def desmatricular_estudiante(matricula: schemas.MatriculaBase, db: Session = Depends(get_db)):
-    estudiante = db.query(models.Estudiantes).filter(models.Estudiantes.id == matricula.Estudiante_id).first()
-    curso = db.query(models.Cursos).filter(models.Cursos.id == matricula.Cursos_id).first()
+    estudiante = db.query(models.Estudiante).filter(models.Estudiante.id == matricula.Estudiante_id).first()
+    curso = db.query(models.Curso).filter(models.Curso.id == matricula.Cursos_id).first()
 
     if not estudiante or not curso:
         raise HTTPException(status_code=404, detail="Estudiante o curso no encontrado")
@@ -160,7 +160,7 @@ def desmatricular_estudiante(matricula: schemas.MatriculaBase, db: Session = Dep
 #Muestra todos los cursos en los que está matriculado un estudiante.
 @app.get("/estudiantes/{estudiante_id}/cursos", response_model=List[schemas.Curso])
 def cursos_de_estudiante(estudiante_id: int, db: Session = Depends(get_db)):
-    estudiante = db.query(models.Estudiantes).filter(models.Estudiantes.id == estudiante_id).first()
+    estudiante = db.query(models.Estudiante).filter(models.Estudiante.id == estudiante_id).first()
     if not estudiante:
         raise HTTPException(status_code=404, detail="Estudiante no encontrado")
     return estudiante.cursos

@@ -5,18 +5,18 @@ from database import Base
 matriculas_table = Table(
     "matriculas",  # Nombre de la tabla en la base de datos
     Base.metadata, # Se asocia a la estructura de SQLAlchemy
-    Column("Cursos_id", Integer, ForeignKey("Cursos.id")),        # Relación con Curso
-    Column("Estudiantes_id", Integer, ForeignKey("Estudiantes.id"))  # Relación con Estudiante
+    Column("curso_id", Integer, ForeignKey("Cursos.id")),        # Relación con Curso
+    Column("estudiante_id", Integer, ForeignKey("Estudiantes.id"))  # Relación con Estudiante
 )
 
-class Cursos(Base):
+class Curso(Base):
 
-    __tablename__ = "Cursos"
+    __tablename__ = "cursos"
 
     id = Column(Integer, primary_key=True, index=True)
     codigo = Column(Integer, index=True)   # Codigo curso (clave primaria)
     nombre = Column(String, index=True) # Nombre curso
-    credito = Column(Integer) # Creditos del curso
+    creditos = Column(Integer) # Creditos del curso
     horario = Column(String) #Horario del curso
 
 
@@ -28,8 +28,8 @@ class Cursos(Base):
     )
 
 
-class Estudiantes(Base):
-    __tablename__ = "Estudiantes"
+class Estudiante(Base):
+    __tablename__ = "estudiantes"
 
     id = Column(Integer, primary_key=True, index=True)
     cedula = Column(Integer, index=True)
@@ -38,7 +38,7 @@ class Estudiantes(Base):
     semestre = Column(Integer)
 
     # Relación N:M → estudiante tiene muchos cursos
-    cursos = relationship(
+    curso = relationship(
         "Curso",
         secondary=matriculas_table,
         back_populates="estudiantes"
