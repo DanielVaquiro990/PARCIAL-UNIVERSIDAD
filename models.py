@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, Integer, String, Float, Boolean, DateTime, ForeignKey
+from sqlalchemy import Table, Column, Integer, String,ForeignKey
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -13,10 +13,11 @@ class Cursos(Base):
 
     __tablename__ = "Cursos"
 
-    codigo = Column(Integer, primary_key=True, index=True)   # Codigo curso (clave primaria)
+    id = Column(Integer, primary_key=True, index=True)
+    codigo = Column(Integer, index=True)   # Codigo curso (clave primaria)
     nombre = Column(String, index=True) # Nombre curso
     credito = Column(Integer) # Creditos del curso
-    horario = Column(Boolean) #Horario del curso
+    horario = Column(String) #Horario del curso
 
 
     # Relación N:M → curso tiene muchos estudiantes
@@ -30,7 +31,8 @@ class Cursos(Base):
 class Estudiantes(Base):
     __tablename__ = "Estudiantes"
 
-    cedula = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True)
+    cedula = Column(Integer, index=True)
     nombre = Column(String, index=True)
     email = Column(String, index=True)
     semestre = Column(Integer)
