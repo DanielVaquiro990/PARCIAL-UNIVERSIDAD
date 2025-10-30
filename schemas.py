@@ -23,7 +23,7 @@ class CrearCurso(CursoBase):
     pass
 
 #Actualiza la informacion de los cursos
-class ActualizarCurso(CursoBase):
+class ActualizarCurso(BaseModel):
     codigo: Optional[int] = None
     nombre: Optional[str] = None
     creditos: Optional[int] = None
@@ -48,7 +48,7 @@ class Estudiante(EstudianteBase):
     cursos: List[Curso] = [] #Realacion N:M
 
 #Actualiza la informacion de los estudiantes
-class ActualizarEstudiante(EstudianteBase):
+class ActualizarEstudiante(BaseModel):
     cedula: Optional[int] = None
     nombre: Optional[str] = None
     email: Optional[str] = None
