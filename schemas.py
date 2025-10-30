@@ -71,8 +71,7 @@ class CrearMatricula(MatriculaBase):
 
 #informacion de la matricula.
 class Matricula(MatriculaBase):
-    id: Optional[int] = None
-
+    id: int
     class Config:
         orm_mode = True
 

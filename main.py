@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Union
 
 from database import Base, engine, SessionLocal
 import models, schemas
@@ -88,7 +88,7 @@ def eliminar_estudiante(estudiante_id: int, db: Session = Depends(get_db)):
 #CREA CURSO
 @app.post("/cursos/", response_model=schemas.Curso)
 def crear_curso(curso: schemas.CrearCurso, db: Session = Depends(get_db)):
-
+    #VALIDA SI EL CURSO YA EXITE
     existente = db.query(models.Curso).filter(models.Curso.codigo == curso.codigo).first()
     if existente:
         raise HTTPException(status_code=400, detail="El codigo de ese curso ya existe")
@@ -183,14 +183,20 @@ def cursos_de_estudiante(estudiante_id: int, db: Session = Depends(get_db)):
     estudiante = db.query(models.Estudiante).filter(models.Estudiante.id == estudiante_id).first()
     if not estudiante:
         raise HTTPException(status_code=404, detail="Estudiante no encontrado")
+    if not estudiante.cursos:
+        raise HTTPException(status_code=404, detail="El estudiante no esta matriculado en ninguno curso")
     return estudiante.cursos
 
 
-
 #    Muestra todos los estudiantes matriculados en un curso.
-@app.get("/cursos/{curso_id}/estudiantes", response_model=List[schemas.EstudianteBase])
+@app.get("/cursos/{curso_id}/estudiantes", response_model=Union[List[schemas.EstudianteBase]])
 def estudiantes_de_curso(curso_id: int, db: Session = Depends(get_db)):
+
     curso = db.query(models.Curso).filter(models.Curso.id == curso_id).first()
     if not curso:
         raise HTTPException(status_code=404, detail="Curso no encontrado")
-    return curso.estudiantes
+
+    if not curso.estudiantes:
+        raise HTTPException(status_code=404, detail="No tiene estudiantes matriculados el curso")
+
+    return {"curso": curso.nombre, "estudiantes": curso.estudiantes}
