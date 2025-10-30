@@ -88,6 +88,11 @@ def eliminar_estudiante(estudiante_id: int, db: Session = Depends(get_db)):
 #CREA CURSO
 @app.post("/cursos/", response_model=schemas.Curso)
 def crear_curso(curso: schemas.CrearCurso, db: Session = Depends(get_db)):
+
+    existente = db.query(models.Curso).filter(models.Curso.codigo == curso.codigo).first()
+    if existente:
+        raise HTTPException(status_code=400, detail="El codigo de ese curso ya existe")
+
     nuevo = models.Curso(**curso.dict())
     db.add(nuevo)
     db.commit()
