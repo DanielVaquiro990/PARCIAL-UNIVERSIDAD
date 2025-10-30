@@ -15,6 +15,9 @@ class Curso(CursoBase):
     codigo: int
     estudiantes: List["Estudiante"] = [] #Relacion N:M
 
+    class Config:
+        orm_mode = True  # Permite convertir objetos ORM a JSON
+
 #Crea curso
 class CrearCurso(CursoBase):
     pass
