@@ -9,6 +9,9 @@ import models, schemas
 Base.metadata.create_all(bind=engine)
 app = FastAPI(title="Sistema de gestion de cursos y estudiantes", version="1.0")
 
+@app.get("/") #MENSAJE PARA DOMINIO LOCAL /8000
+def inicio():
+    return {"SISTEMA DE GESTION DE CURSOS Y ESTUDIANTES"}
 
 # Dependencia para obtener sesión de base de datos
 def get_db():
@@ -25,6 +28,11 @@ def get_db():
 #CREA UN ESTUDIANTE
 @app.post("/estudiantes/", response_model=schemas.EstudianteBase)
 def crear_estudiante(estudiante: schemas.CrearEstudiante, db: Session = Depends(get_db)):
+    #Verifica si ya existe un estudiante con esa cédula
+    existente = db.query(models.Estudiante).filter(models.Estudiante.cedula == estudiante.cedula).first()
+    if existente:
+        raise HTTPException(status_code=400, detail="La cédula ya está registrada.")
+
     nuevo = models.Estudiante(**estudiante.dict())
     db.add(nuevo)
     db.commit()

@@ -14,7 +14,7 @@ class Curso(Base):
     __tablename__ = "cursos"
 
     id = Column(Integer, primary_key=True, index=True)
-    codigo = Column(Integer, index=True)   # Codigo curso (clave primaria)
+    codigo = Column(Integer, index=True, unique=True)   # Codigo curso (clave primaria), codigo del curso unico (unique=True)
     nombre = Column(String, index=True) # Nombre curso
     creditos = Column(Integer) # Creditos del curso
     horario = Column(String) #Horario del curso
@@ -32,7 +32,7 @@ class Estudiante(Base):
     __tablename__ = "estudiantes"
 
     id = Column(Integer, primary_key=True, index=True)
-    cedula = Column(Integer, index=True)
+    cedula = Column(Integer, index=True, unique=True) #cedula unica (unique=True)
     nombre = Column(String, index=True)
     email = Column(String, index=True)
     semestre = Column(Integer)
