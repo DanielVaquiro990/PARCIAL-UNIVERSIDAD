@@ -101,7 +101,13 @@ uvicorn main:app --reload
 ## 🎉 ¡Disfrutalo!
 
 
+Si sale error al activarlo
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+Para activarlo en Windows
+.\.venv\Scripts\Activate
 
 
 
