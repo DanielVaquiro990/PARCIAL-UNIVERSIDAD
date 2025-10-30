@@ -5,8 +5,8 @@ from database import Base
 matriculas_table = Table(
     "matriculas",  # Nombre de la tabla en la base de datos
     Base.metadata, # Se asocia a la estructura de SQLAlchemy
-    Column("curso_id", Integer, ForeignKey("cursos.id")),        # Relación con Curso
-    Column("estudiante_id", Integer, ForeignKey("estudiantes.id"))  # Relación con Estudiante
+    Column("Cursos_id", Integer, ForeignKey("Cursos.id")),        # Relación con Curso
+    Column("Estudiantes_id", Integer, ForeignKey("Estudiantes.id"))  # Relación con Estudiante
 )
 
 class Cursos(Base):

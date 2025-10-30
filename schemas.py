@@ -40,7 +40,7 @@ class CrearEstudiante(EstudianteBase):
     pass
 
 #Muestra estudiante y cursos matriculados
-class InfoEstudiante(EstudianteBase):
+class Estudiante(EstudianteBase):
     id: int
     cursos: List[Curso] = [] #Realacion N:M
 
@@ -52,4 +52,29 @@ class ActualizarEstudiante(EstudianteBase):
     semestre: Optional[str] = None
 
 
+# ----------------------------------------------------------
+# SCHEMA PARA MATRÍCULAS (relación N:M)
 
+#Representa una relación entre un estudiante y un curso. Se usa para registrar o eliminar una matrícula.
+class MatriculaBase(BaseModel):
+    curso_id: int
+    estudiante_id: int
+
+
+#Se usa al crear una nueva matrícula (inscripción de un estudiante a un curso).
+class CrearMatricula(MatriculaBase):
+    pass
+
+
+#informacion de la matricula.
+class Matricula(MatriculaBase):
+    id: Optional[int] = None
+
+    class Config:
+        orm_mode = True
+
+Curso.update_forward_refs()
+Estudiante.update_forward_refs()
+
+Curso.model_rebuild()
+Estudiante.model_rebuild()
