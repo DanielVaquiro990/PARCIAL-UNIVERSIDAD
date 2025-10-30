@@ -1,0 +1,21 @@
+# Ignorar archivos de base de datos SQLite
+*.db
+*.sqlite3
+
+# Ignorar cachés de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignorar entorno virtual (si usas uno local)
+venv/
+.env/
+
+# Ignorar configuraciones de VSCode o PyCharm
+.vscode/
+.idea/
+
+# Archivos de logs o temporales
+*.log
+.DS_Store
